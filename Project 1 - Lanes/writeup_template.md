@@ -25,7 +25,7 @@ My pipeline consisted of 5 steps
 - lines were calculated in the Hough Space
 - finally, in addition to the course videos, we "averaged" the lines
 
-In order to draw a single line on the left and right lanes, I created new draw_lines() function. In the version with highest performance, we do the following:
+In order to draw a single line on the left and right lanes, I created new draw_lines() function. In the last version (draw_lines2), we do the following:
 - split the Hough Lines, depending on whether the x coordinates cross the middle line (simpler than the splope suggestion)
 - doing seperate regression on the line extremities for the left and right panels
 
