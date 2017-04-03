@@ -13,14 +13,14 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: sign_examples.png “Sign overview“
+[image1]: .sign_examples.png "Sign Examples"
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image4]: ./images/1.jpg "Traffic Sign 1"
+[image5]: ./images/2.jpg "Traffic Sign 2"
+[image6]: ./images/3.jpg "Traffic Sign 3"
+[image7]: ./images/4.jpg "Traffic Sign 4"
+[image8]: ./images/5.jpg "Traffic Sign 5"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
