@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./images/bar_char.png "Bar Chart"
+[image1]: ./images/bar_chart.png "Bar Chart"
 [image2]: ./images/sign_examples.png "Sign Examples"
 [image3]: ./images/sign_examples_grey.png "Sign Examples Grayscaling"
 [image4]: ./images/1.jpg "Traffic Sign 1"
