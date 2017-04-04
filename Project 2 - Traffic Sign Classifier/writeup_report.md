@@ -13,9 +13,9 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: .sign_examples.png "Sign Examples"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
+[image1]: ./images/bar_char.png "Bar Chart"
+[image2]: ./images/sign_examples.png "Sign Examples"
+[image3]: ./images/sign_examples_grey.png "Sign Examples Grayscaling"
 [image4]: ./images/1.jpg "Traffic Sign 1"
 [image5]: ./images/2.jpg "Traffic Sign 2"
 [image6]: ./images/3.jpg "Traffic Sign 3"
@@ -41,63 +41,75 @@ The code for this step is contained in the second code cell of the IPython noteb
 I used the pandas library to calculate summary statistics of the traffic
 signs data set:
 
-* The size of training set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+* The size of training set is 34799
+* The size of test set is 12630
+* The shape of a traffic sign image is (32, 32, 3)
+* The number of unique classes/labels in the data set is 43
 
 ####2. Include an exploratory visualization of the dataset and identify where the code is in your code file.
 
-The code for this step is contained in the third code cell of the IPython notebook.  
+During our exploration of the the dataset, we build 2 main visuals:
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+* Barchart showing the number of examples per class. We see that it varies for 200 to 2000. If we estimate that this is biases compared to reality, we could consider loss functions that give the same weight to each class (vs. each sample)
 
 ![alt text][image1]
+
+* Random examples of each class. We can see that beyond the variation in class, there is variation in "image quality", contrast, etc.
+
+![alt text][image2]
 
 ###Design and Test a Model Architecture
 
 ####1. Describe how, and identify where in your code, you preprocessed the image data. What tecniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.
 
-The code for this step is contained in the fourth code cell of the IPython notebook.
+The code for this step is split in 2:
 
-As a first step, I decided to convert the images to grayscale because ...
+* In Step 2, the section "Pre-process the Data Set" contains a series of helper functions that were considered, together with an example of the transformation used for the final neural network
+* The actual execution on the datasets is done in the section "Train, Validate and Test the Model" of Step 2 for simplicity reasons (avoids having to navigate constantly up the notebook, when changing the number of colours for example)
 
-Here is an example of a traffic sign image before and after grayscaling.
+As a first step, I decided to convert the images to grayscale because it reduced the computation. Also, when using the original RGB, the NN was overfitting straight from the first epoch, with generally validation accuracy < 90% of training accuracy.
 
-![alt text][image2]
+As a second step, we used histogram validation described [here](https://en.wikipedia.org/wiki/Histogram_equalization) to correct for the strong variation in contrast.
 
-As a last step, I normalized the image data because ...
+We then normalize to improve the convergence of the gradient descent.
 
-####2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
-
-The code for splitting the data into training and validation sets is contained in the fifth code cell of the IPython notebook.  
-
-To cross validate my model, I randomly split the training data into a training set and validation set. I did this by ...
-
-My final training set had X number of images. My validation set and test set had Y and Z number of images.
-
-The sixth code cell of the IPython notebook contains the code for augmenting the data set. I decided to generate additional data because ... To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
+Here is an example of a traffic sign image with the different steps of grey scaling
 
 ![alt text][image3]
 
-The difference between the original data set and the augmented data set is the following ... 
+####2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
 
+The code for splitting the data into training and validation sets is contained in step 0 of the notebook. We follow the split of the original dataset (i.e. do not reshuffle between datasets).  
+
+The resulting dataset sizes are
+
+* Training = 34799
+* Validation = 34799
+* Test = 12630
+
+We decided not to augment data, since we managed to reach the test target without.
 
 ####3. Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-The code for my final model is located in the seventh cell of the ipython notebook. 
+After several more complicated trials, including a reproduction of the [LeCun architecture](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf) for a similar issue, we fell back on the architecture of the original LeNet homework. The main reason is that of architectures resulted in overfitting very early in the training process.
+
+It is worth mentioning though that theoritically, we could use the RBG images, and more complex architectures (e.g. several convolutional net in a row before pooling, see architecture "Net3") with dataset augmentation and further tightening of the parameters.
+
+The code for my final model is located in Step 2, as a combination of the "Net" function described in the "Architecture" section, and the hyperparameters in the first cell of the "Train, Validate and Test the Model" section.
 
 My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
+| Input         		| 32x32x1 RGB image   							| 
+| Convolution 5x5     	| 1x1 stride, same padding, outputs 32x32x64 	|
 | RELU					|												|
 | Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
+| Convolution 5x5	    | etc.      									|
+| RELU					|												|
+| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
+| Fully connected		| etc.        									|
+| Fully connected		| etc.        									|
 | Fully connected		| etc.        									|
 | Softmax				| etc.        									|
 |						|												|
