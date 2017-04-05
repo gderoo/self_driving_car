@@ -191,7 +191,10 @@ Here are the results of the prediction:
 | General caution      		| No entry				 				|
 | Keep right			| Keep right      							|
 
-The model only did 3 correct guess out of 5. This is potentially linked to a bad histogram equalization. It can also be linked to the fact that in both images, the sign is smaller and higher in the image.
+The model only did 3 correct guess out of 5. This accuracy of 60% on the captured images is lower than the 93% on the testing set, meaning that we are potentially overfitting.
+
+
+The source of the difference can come a bad histogram equalization. It can also be linked to the fact that in both images, the sign is smaller and higher in the image.
 
 ![alt text][loaded]
 
