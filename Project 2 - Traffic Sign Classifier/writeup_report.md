@@ -64,7 +64,7 @@ During our exploration of the the dataset, we build 2 main visuals:
 
 #### 1. Describe how, and identify where in your code, you preprocessed the image data. What tecniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.
 
-We performed 4 processing steps:
+We performed 3 processing steps:
 
 * Augmenting the data via tilting
 * Perform histogram equalization
@@ -79,7 +79,7 @@ The code for this step is split in 2:
 
 ![alt text][tilt]
 
-**Grey:** We add originally decided to convert the images to grayscale to reduce the computation, limit overfitting. But we ended up increasing the size of the model.
+*Grey:* We add originally decided to convert the images to grayscale to reduce the computation, limit overfitting. But we ended up increasing the size of the model.
 
 **Histogram Equalization:** we used histogram equalization described [here](https://en.wikipedia.org/wiki/Histogram_equalization) to correct for the strong variation in contrast. We applied a similar concept to the RGB image, but there is a potential color deformation which needs to be investigated.
 
@@ -151,10 +151,11 @@ My final model results were:
 * test set accuracy of 0.933
 
 Main steps to find the solution:
-* I started with the LeNet architecture, in RGB. However the model was quickly overfitting: validation accuracy was 10% lower than training accuracy from EPOCH 1 (i.e. valid:0.45 vs train:0.5), and the training accuracy did not go above 0.94
+* I started with the LeNet architecture, in grey scale. However the model was quickly overfitting: validation accuracy was 10% lower than training accuracy from EPOCH 1 (i.e. valid:0.45 vs train:0.5), and the training accuracy did not go above 0.94
 * The main adjustements were to
   * complexify the model to allow the model to reach higher accuracies (several convolutions in a row before max pool), as well as increasing the depth of the convolution (6,16 to 12, 36)
-  * reduce the overfitting by going to grey scale, introducing a dropout rate, and augmenting the original dataset
+  * Given that size of modelrestricting to greyscale vs RGB didn't save a lot of training time, so we switched to RGB
+  * reduce the overfitting by going introducing a dropout rate, and augmenting the original dataset
 * We also reduced the original sigma and the learning rate because the ramp-up of accuracy seemed very high (and still is to some extent)
 * The introduction of several convolution in a row before max pooling because it seemed promising while looking at the [literature](https://www.cs.toronto.edu/~frossard/post/vgg16/)
 
