@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 [img3]: ./images/3.jpg
 [img4]: ./images/4.jpg
 [img5]: ./images/5.jpg
-[loaded]: ./images/sign_german.jpg "Internet Signs"
+[loaded]: ./images/sign_german.png "Internet Signs"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
