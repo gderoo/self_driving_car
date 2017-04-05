@@ -13,11 +13,11 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./images/bar_chart.png "Bar Chart"
-[image2]: ./images/sign_examples.png "Sign Examples"
-[image3]: ./images/sign_grey.png "Grayscaling"
-[image4]: ./images/sign_tilt.png "Tilting"
-[image5]: ./images/sign_german.jpg "Internet Signs"
+[barchart]: ./images/bar_chart.png "Bar Chart"
+[examples]: ./images/sign_examples.png "Sign Examples"
+[grey]: ./images/sign_grey.png "Grayscaling"
+[tilt]: ./images/sign_tilt.png "Tilting"
+[german]: ./images/sign_german.jpg "Internet Signs"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -49,30 +49,39 @@ During our exploration of the the dataset, we build 2 main visuals:
 
 * Barchart showing the number of examples per class. We see that it varies for 200 to 2000. If we estimate that this is biases compared to reality, we could consider loss functions that give the same weight to each class (vs. each sample)
 
-![alt text][image1]
+![alt text][barchart]
 
 * Random examples of each class. We can see that beyond the variation in class, there is variation in "image quality", contrast, etc.
 
-![alt text][image2]
+![alt text][examples]
 
 ### Design and Test a Model Architecture
 
 #### 1. Describe how, and identify where in your code, you preprocessed the image data. What tecniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.
+
+We performed 4 processing steps:
+
+* Augmenting the data via tilting
+* Convert to greyscale
+* Perform histogram equalization
+* Normalize the data
 
 The code for this step is split in 2:
 
 * In Step 2, the section "Pre-process the Data Set" contains a series of helper functions that were considered, together with an example of the transformation used for the final neural network
 * The actual execution on the datasets is done in the section "Train, Validate and Test the Model" of Step 2 for simplicity reasons (avoids having to navigate constantly up the notebook, when changing the number of colours for example)
 
-As a first step, I decided to convert the images to grayscale because it reduced the computation. Also, when using the original RGB, the NN was overfitting straight from the first epoch, with generally validation accuracy < 90% of training accuracy.
+**Augmenting:** We decided to augment the data, because there is a strong imbalance between classes in the original dataset, which led the model to overfit from the first epoch.
 
-As a second step, we used histogram validation described [here](https://en.wikipedia.org/wiki/Histogram_equalization) to correct for the strong variation in contrast.
+![alt text][tilt]
 
-We then normalize to improve the convergence of the gradient descent.
+**Grey:** We originally decided to convert the images to grayscale to reduce the computation, limit overfitting. This could be forgotten later down, since we ended up increase the size of the model.
 
-Here is an example of a traffic sign image with the different steps of grey scaling
+**Histogram Equalization:** we used histogram equalization described [here](https://en.wikipedia.org/wiki/Histogram_equalization) to correct for the strong variation in contrast.
 
-![alt text][image3]
+![alt text][grey]
+
+**Normalization:** We then normalize to improve the convergence of the gradient descent.
 
 #### 2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
 
@@ -81,10 +90,9 @@ The code for splitting the data into training and validation sets is contained i
 The resulting dataset sizes are
 
 * Training = 34799
-* Validation = 34799
+* Validation = 4410
 * Test = 12630
 
-We decided not to augment data, since we managed to reach the test target without.
 
 #### 3. Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
