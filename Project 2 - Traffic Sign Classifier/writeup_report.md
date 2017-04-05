@@ -38,8 +38,9 @@ The code for this step is contained in the second code cell of the IPython noteb
 I used the pandas library to calculate summary statistics of the traffic
 signs data set:
 
-* The size of training set is 34799
-* The size of test set is 12630
+* Training = 34799
+* Validation = 4410
+* Test = 12630
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
@@ -85,20 +86,17 @@ The code for this step is split in 2:
 
 #### 2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
 
-The code for splitting the data into training and validation sets is contained in step 0 of the notebook. We follow the split of the original dataset (i.e. do not reshuffle between datasets).  
+The actual execution of preprocessing is done in the section "Train, Validate and Test the Model" of Step 2.
 
-The resulting dataset sizes are
+We follow the split of the original dataset, but since we performed an augmentation. The resulting dataset sizes are
 
-* Training = 34799
+* Training = **56337**
 * Validation = 4410
 * Test = 12630
 
-
 #### 3. Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-After several more complicated trials, including a reproduction of the [LeCun architecture](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf) for a similar issue, we fell back on the architecture of the original LeNet homework. The main reason is that of architectures resulted in overfitting very early in the training process.
-
-It is worth mentioning though that theoritically, we could use the RBG images, and more complex architectures (e.g. several convolutional net in a row before pooling, see architecture "Net3") with dataset augmentation and further tightening of the parameters.
+After several more complicated trials, including a reproduction of the [LeCun architecture](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf) for a similar issue, we fell back on the architecture of the original LeNet homework augmented by convolutional nets.
 
 The code for my final model is located in Step 2, as a combination of the "Net" function described in the "Architecture" section, and the hyperparameters in the first cell of the "Train, Validate and Test the Model" section.
 
@@ -106,20 +104,25 @@ My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x1 RGB image   							| 
-| Convolution 5x5     	| 1x1 stride, same padding, outputs 32x32x64 	|
+| Input         		| 32x32x1 Grey Image   							| 
+| Convolution 5x5     	| 1x1 stride, same padding, outputs 32x32x12 	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 5x5	    | etc.      									|
+| Convolution 5x5     	| 1x1 stride, same padding, outputs 32x32x12 	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Fully connected		| etc.        									|
-| Fully connected		| etc.        									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
+| Max pooling	      	| 2x2 stride,  outputs 16x16x12 				|
+| Convolution 5x5     	| 1x1 stride, same padding, outputs 16x16x36 	|
+| RELU					|												|
+| Convolution 5x5     	| 1x1 stride, same padding, outputs 16x16x36 	|
+| RELU					|												|
+| Max pooling	      	| 2x2 stride,  outputs 8x8x36 				|
+| Flatten	      	| input 5x5x36 output 900				|
+| Fully connected		| outputs 400      									|
+| RELU					|												|
+| Dropout	| keep_prob = 50%         									|
+| Fully connected		| outputs 200       									|
+| RELU					|												|
+| Dropout	| keep_prob = 50%         									|
+| Fully connected		| outputs 43        									|
 
 
 #### 4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
