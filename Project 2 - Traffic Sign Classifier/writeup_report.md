@@ -17,7 +17,12 @@ The goals / steps of this project are the following:
 [examples]: ./images/sign_examples.png "Sign Examples"
 [grey]: ./images/sign_grey.png "Grayscaling"
 [tilt]: ./images/sign_tilt.png "Tilting"
-[german]: ./images/sign_german.jpg "Internet Signs"
+[img1]: ./images/1.jpg
+[img2]: ./images/2.jpg
+[img3]: ./images/3.jpg
+[img4]: ./images/4.jpg
+[img5]: ./images/5.jpg
+[loaded]: ./images/sign_german.jpg "Internet Signs"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -154,40 +159,43 @@ Main steps to find the solution:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][german]
+![alt text][img1] ![alt text][img2] ![alt text][img3] ![alt text][img4] ![alt text][img5]
 
-The first image might be difficult to classify because ...
+All seemed relatively fairly easy to classify
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
-The code for making predictions on my final model is located in the tenth cell of the Ipython notebook.
+The code for making predictions on my final model is located in Step 3 of the notebook.
 
 Here are the results of the prediction:
 
+pred = [11, 38, 1, 26, 38]
+real = [11, 1, 32, 18, 38]
+
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Right-of-way at the next intersection      		| Right-of-way at the next intersection   									| 
+| Speed limit (30km/h)     			| Keep right 										|
+| End of all speed and passing limits					| Speed limit (30km/h)											|
+| General caution      		| Traffic signals				 				|
+| Keep right			| Keep right      							|
 
+The model only did 2 correct guess out of 5. This is potentially linked to a bad loading (i.e. red and blue are inverted). Also, if we had used the RGB image as input, it seems very likely that we would have avoided these issues.
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+![alt text][loaded]
+
+Unfortunately, the training was relatively slow, and an error is saving the models made it impractical to try another time.
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+| 1.00         			| Right-of-way at the next intersection - correct   									| 
+| 0.42     				| Keep right - incorrect 										|
+| 0.37					| Speed limit (30km/h) - incorrect											|
+| 0.39	      			| Traffic signals - incorrect					 				|
+| 1.00				    | Keep right - correct      							|
 
-
-For the second image ... 
+We see that there is a clear difference in probabilities between the cases when the model is
