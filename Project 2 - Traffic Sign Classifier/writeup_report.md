@@ -141,6 +141,8 @@ To train the model, I used an AWS instance with the following hyperparameters:
 * sigma = 0.005
 * keep_prob = 0.5
 
+We reduced the parameters compared to the original LeNet to decrease the speed of ramp-up at the beginning.
+
 ####5. Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
