@@ -40,8 +40,7 @@ You're reading it! and here is a link to my [project code](https://github.com/gd
 
 The code for this step is contained in the second code cell of the IPython notebook.  
 
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
+I used the numpy library to calculate summary statistics of the traffic signs data set:
 
 * Training = 34799
 * Validation = 4410
@@ -68,7 +67,6 @@ During our exploration of the the dataset, we build 2 main visuals:
 We performed 4 processing steps:
 
 * Augmenting the data via tilting
-* Convert to greyscale
 * Perform histogram equalization
 * Normalize the data
 
@@ -81,9 +79,9 @@ The code for this step is split in 2:
 
 ![alt text][tilt]
 
-**Grey:** We originally decided to convert the images to grayscale to reduce the computation, limit overfitting. This could be forgotten later down, since we ended up increase the size of the model.
+**Grey:** We add originally decided to convert the images to grayscale to reduce the computation, limit overfitting. But we ended up increasing the size of the model.
 
-**Histogram Equalization:** we used histogram equalization described [here](https://en.wikipedia.org/wiki/Histogram_equalization) to correct for the strong variation in contrast.
+**Histogram Equalization:** we used histogram equalization described [here](https://en.wikipedia.org/wiki/Histogram_equalization) to correct for the strong variation in contrast. We applied a similar concept to the RGB image, but there is a potential color deformation which needs to be investigated.
 
 ![alt text][grey]
 
@@ -109,7 +107,7 @@ My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x1 Grey Image   							| 
+| Input         		| 32x32x3 RGB image  							| 
 | Convolution 5x5     	| 1x1 stride, same padding, outputs 32x32x12 	|
 | RELU					|												|
 | Convolution 5x5     	| 1x1 stride, same padding, outputs 32x32x12 	|
@@ -134,7 +132,14 @@ My final model consisted of the following layers:
 
 The code for training the model is located in the section "Train, Validate and Test the Model" of Step 2. 
 
-To train the model, I used an AWS instance.
+To train the model, I used an AWS instance with the following hyperparameters:
+
+* EPOCHS = Max nb of EPOCHS = 200 (note that we put a stopping condition, so that we actually only ended up training for xx)
+* BATCH_SIZE = 128
+* rate = 0.0005
+* mu = 0
+* sigma = 0.005
+* keep_prob = 0.5
 
 ####5. Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
@@ -161,7 +166,7 @@ Here are five German traffic signs that I found on the web:
 
 ![alt text][img1] ![alt text][img2] ![alt text][img3] ![alt text][img4] ![alt text][img5]
 
-All seemed relatively fairly easy to classify
+All seemed relatively fairly easy to classify, except 2nd and 4th which are smaller and slightly higher.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -169,18 +174,18 @@ The code for making predictions on my final model is located in Step 3 of the no
 
 Here are the results of the prediction:
 
-pred = [11, 38, 1, 26, 38]
+pred = [11, 9, 32, 17, 38]
 real = [11, 1, 32, 18, 38]
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Right-of-way at the next intersection      		| Right-of-way at the next intersection   									| 
-| Speed limit (30km/h)     			| Keep right 										|
+| Speed limit (30km/h)     			| No passing 										|
 | End of all speed and passing limits					| Speed limit (30km/h)											|
-| General caution      		| Traffic signals				 				|
+| General caution      		| No entry				 				|
 | Keep right			| Keep right      							|
 
-The model only did 2 correct guess out of 5. This is potentially linked to a bad loading (i.e. red and blue are inverted). Also, if we had used the RGB image as input, it seems very likely that we would have avoided these issues.
+The model only did 3 correct guess out of 5. This is potentially linked to a bad histogram equalization. It can also be linked to the fact that in both images, the sign is smaller and higher in the image.
 
 ![alt text][loaded]
 
@@ -193,9 +198,9 @@ The code for making predictions on my final model is located in the 11th cell of
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | 1.00         			| Right-of-way at the next intersection - correct   									| 
-| 0.42     				| Keep right - incorrect 										|
-| 0.37					| Speed limit (30km/h) - incorrect											|
-| 0.39	      			| Traffic signals - incorrect					 				|
+| 0.56     				| No passing - incorrect 										|
+| 0.94					| Speed limit (30km/h) - incorrect											|
+| 0.63	      			| No entry - incorrect					 				|
 | 1.00				    | Keep right - correct      							|
 
-We see that there is a clear difference in probabilities between the cases when the model is
+We see that there is a clear difference in probabilities between the cases when the model is correct and when it is incorrect.
