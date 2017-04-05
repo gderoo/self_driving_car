@@ -13,7 +13,8 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[barchart]: ./images/bar_chart.png "Bar Chart"
+[barchart]: ./images/barchart.png "Bar Chart"
+[barchart2]: ./images/barchart2.png "Bar Chart"
 [examples]: ./images/sign_examples.png "Sign Examples"
 [grey]: ./images/sign_grey.png "Grayscaling"
 [tilt]: ./images/sign_tilt.png "Tilting"
@@ -79,6 +80,8 @@ The code for this step is split in 2:
 
 ![alt text][tilt]
 
+![alt text][barchart2]
+
 *Grey:* We add originally decided to convert the images to grayscale to reduce the computation, limit overfitting. But we ended up increasing the size of the model.
 
 **Histogram Equalization:** we used histogram equalization described [here](https://en.wikipedia.org/wiki/Histogram_equalization) to correct for the strong variation in contrast. We applied a similar concept to the RGB image, but there is a potential color deformation which needs to be investigated.
@@ -134,7 +137,7 @@ The code for training the model is located in the section "Train, Validate and T
 
 To train the model, I used an AWS instance with the following hyperparameters:
 
-* EPOCHS = Max nb of EPOCHS = 200 (note that we put a stopping condition, so that we actually only ended up training for xx)
+* EPOCHS = 42 (the 200 EPOCHS written is a max,  we put a stopping condition once we reach 0.96)
 * BATCH_SIZE = 128
 * rate = 0.0005
 * mu = 0
