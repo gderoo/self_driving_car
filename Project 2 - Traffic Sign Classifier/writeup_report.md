@@ -24,6 +24,7 @@ The goals / steps of this project are the following:
 [img4]: ./images/4.jpg
 [img5]: ./images/5.jpg
 [loaded]: ./images/sign_german.png "Internet Signs"
+[accuracy]: ./images/accuracy.png
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -155,6 +156,8 @@ My final model results were:
 * validation set accuracy of 0.966
 * test set accuracy of 0.933
 
+![alt text][accuracy]
+
 Main steps to find the solution:
 * I started with the LeNet architecture, in grey scale. However the model was quickly overfitting: validation accuracy was 10% lower than training accuracy from EPOCH 1 (i.e. valid:0.45 vs train:0.5), and the training accuracy did not go above 0.94
 * The main adjustements were to
@@ -180,9 +183,6 @@ The code for making predictions on my final model is located in Step 3 of the no
 
 Here are the results of the prediction:
 
-pred = [11, 9, 32, 17, 38]
-real = [11, 1, 32, 18, 38]
-
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Right-of-way at the next intersection      		| Right-of-way at the next intersection   									| 
@@ -194,8 +194,6 @@ real = [11, 1, 32, 18, 38]
 The model only did 3 correct guess out of 5. This is potentially linked to a bad histogram equalization. It can also be linked to the fact that in both images, the sign is smaller and higher in the image.
 
 ![alt text][loaded]
-
-Unfortunately, the training was relatively slow, and an error is saving the models made it impractical to try another time.
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
