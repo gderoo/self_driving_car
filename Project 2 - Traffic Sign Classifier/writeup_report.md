@@ -127,31 +127,26 @@ My final model consisted of the following layers:
 
 #### 4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-The code for training the model is located in the eigth cell of the ipython notebook. 
+The code for training the model is located in the section "Train, Validate and Test the Model" of Step 2. 
 
-To train the model, I used an ....
+To train the model, I used an AWS instance.
 
 ####5. Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 0.988
+* validation set accuracy of 0.966
+* test set accuracy of 0.933
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to over fitting or under fitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+Main steps to find the solution:
+* I started with the LeNet architecture, in RGB. However the model was quickly overfitting: validation accuracy was 10% lower than training accuracy from EPOCH 1 (i.e. valid:0.45 vs train:0.5), and the training accuracy did not go above 0.94
+* The main adjustements were to
+  * complexify the model to allow the model to reach higher accuracies (several convolutions in a row before max pool), as well as increasing the depth of the convolution (6,16 to 12, 36)
+  * reduce the overfitting by going to grey scale, introducing a dropout rate, and augmenting the original dataset
+* We also reduced the original sigma and the learning rate because the ramp-up of accuracy seemed very high (and still is to some extent)
+* The introduction of several convolution in a row before max pooling because it seemed promising while looking at the [literature](https://www.cs.toronto.edu/~frossard/post/vgg16/)
 
 ### Test a Model on New Images
 
@@ -159,8 +154,7 @@ If a well known architecture was chosen:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][german]
 
 The first image might be difficult to classify because ...
 
