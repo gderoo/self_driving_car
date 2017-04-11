@@ -35,11 +35,11 @@ def random_modif(img, ang):
     image = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 
     # Smoothing for position in the lane
-    s = np.random.uniform(-10, 10)
-    image = scipy.ndimage.interpolation.shift(image,[0,s,0], mode = 'nearest')
+    s = np.random.uniform(-20, 20)
+    image = scipy.ndimage.interpolation.shift(image,[0,s,0])+0.003*s
     
     # Angle smoothing
-    angle = angle + np.random.uniform(-0.1, 0.1)
+    angle = angle*(1+0.04*np.random.uniform(-1, 1))
 
     return image, angle
 
@@ -63,13 +63,13 @@ def generator(samples, batch_size=32):
             n = np.random.choice([0,1,2])
             name = './data/IMG/'+sample[n].split('/')[-1]
             image = cv2.imread(name)
-            angle = float(sample[3])+0.25-0.25*n
+            angle = float(sample[3])+0.25*(1-n) # correcting angle
             
             # Random data preprocessing
             new_image, new_angle = random_modif(image, angle)
             
             # Under sampling of small angles
-            if (np.random.uniform()<0.4) or (new_angle > 0.1):
+            if (np.random.uniform()<0.5) or (abs(new_angle)>0.1):
                 images.append(new_image)
                 angles.append(new_angle)
                 n_batch +=1
@@ -90,19 +90,20 @@ model.add(Cropping2D(cropping=((70,25),(0,0)),input_shape=(row, col, ch)))
 model.add(Lambda(lambda x: x/127.5 - 1.)) # Normalization
 model.add(Convolution2D(24,5,5, activation = "relu"))
 model.add(MaxPooling2D())
-model.add(Convolution2D(36,5,5, activation = "relu"))
+model.add(Convolution2D(36,3,3, activation = "relu"))
 model.add(MaxPooling2D())
-model.add(Convolution2D(48,5,5, activation = "relu"))
+model.add(Convolution2D(48,3,3, activation = "relu"))
 model.add(MaxPooling2D())
 model.add(Flatten())
 model.add(Dense(500))
 model.add(Dropout(0.5))
 model.add(Dense(200))
+model.add(Dropout(0.5))
 model.add(Dense(50))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit_generator(train_generator, samples_per_epoch= 256*(2**5), validation_data=validation_generator, nb_val_samples=len(validation_samples), nb_epoch=1)
+model.fit_generator(train_generator, samples_per_epoch= 256*(2**6), validation_data=validation_generator, nb_val_samples=256*(2**2), nb_epoch=3)
 
 model.save('model.h5')
 
