@@ -10,6 +10,7 @@ import scipy.ndimage
 
 # Aggregating the samples from the different sample sources
 data_list = ['./data/', './data_manual/', './data_manual_counter/']
+#data_list = ['./data/']
 samples = []
 for source in data_list:
     with open(source+'driving_log.csv') as csvfile:
@@ -49,10 +50,8 @@ def generator_new(samples, batch_size=32):
     
     while 1: # Loop forever so the generator never terminates
         shuffle(samples)
-        i_batch = 0
-        n_batch = 0
-        images = []
-        angles = []
+        i_batch, n_batch = 0, 0
+        images, angles = [], []
 
         while n_batch < batch_size:
 
@@ -77,6 +76,7 @@ def generator_new(samples, batch_size=32):
         y_train = np.array(angles)
         yield shuffle(X_train, y_train)
 
+# Original image generator
 def generator(samples, batch_size=32):
     num_samples = len(samples)
     while 1: # Loop forever so the generator never terminates
@@ -87,7 +87,7 @@ def generator(samples, batch_size=32):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                center_image = cv2.imread(sample[1])
+                center_image = cv2.imread(batch_sample[1])
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
@@ -99,8 +99,8 @@ def generator(samples, batch_size=32):
 
 
 # compile and train the model using the generator function
-train_generator = generator(train_samples, batch_size=256)
-validation_generator = generator(validation_samples, batch_size=256)
+train_generator = generator_new(train_samples, batch_size=256)
+validation_generator = generator_new(validation_samples, batch_size=256)
 
 row, col, ch = 160, 320, 3  # Regular image format
 
