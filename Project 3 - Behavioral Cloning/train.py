@@ -8,45 +8,45 @@ from keras.layers.pooling import MaxPooling2D
 from sklearn.utils import shuffle
 import scipy.ndimage
 
+# Aggregating the samples from the different sample sources
+data_list = ['./data/', './data_manual/', './data_manual_counter/']
 samples = []
+for source in data_list:
+    with open(source+'driving_log.csv') as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            line[0], line[1] = line[1], line[0] # Correcting the order to make later code cleaner
+            for i in range(3):
+                line[i] = source+'IMG/'+line[i].split('/')[-1] # Already correcting image paths
+            samples.append(line)
 
-with open('./data/driving_log.csv') as csvfile:
-    reader = csv.reader(csvfile)
-    for line in reader:
-        line[0], line[1] = line[1], line[0] # Correcting the order to make later code cleaner
-        samples.append(line)
-
-
+# Data split
 train_samples, validation_samples = train_test_split(samples[1:], test_size=0.2) # excluding the header line
 
+# Helper function to preprocess image for the generator
 def random_modif(img, ang):
     
     image, angle = img, ang
-    
     # Random flipping
     if (np.random.uniform()<0.5):
         image = cv2.flip(image,1)
         angle = angle*-1.0
-                
     # Random brightness
     factor = np.random.uniform(0.5, 1.2)
     hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     hsv[:,:,2] = hsv[:,:,2] * factor
     image = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
-
     # Smoothing for position in the lane
     s = np.random.uniform(-20, 20)
     image = scipy.ndimage.interpolation.shift(image,[0,s,0])+0.003*s
-    
     # Angle smoothing
     angle = angle*(1+0.04*np.random.uniform(-1, 1))
 
     return image, angle
 
-
-def generator(samples, batch_size=32):
+# Image generator
+def generator_new(samples, batch_size=32):
     
-    num_samples = len(samples)
     while 1: # Loop forever so the generator never terminates
         shuffle(samples)
         i_batch = 0
@@ -59,10 +59,9 @@ def generator(samples, batch_size=32):
             sample = samples[i_batch]
             i_batch += 1
             
-            # Random selection of the image
+            # Random selection between left/center/right image
             n = np.random.choice([0,1,2])
-            name = './data/IMG/'+sample[n].split('/')[-1]
-            image = cv2.imread(name)
+            image = cv2.imread(sample[n])
             angle = float(sample[3])+0.25*(1-n) # correcting angle
             
             # Random data preprocessing
@@ -77,6 +76,27 @@ def generator(samples, batch_size=32):
         X_train = np.array(images)
         y_train = np.array(angles)
         yield shuffle(X_train, y_train)
+
+def generator(samples, batch_size=32):
+    num_samples = len(samples)
+    while 1: # Loop forever so the generator never terminates
+        shuffle(samples)
+        for offset in range(0, num_samples, batch_size):
+            batch_samples = samples[offset:offset+batch_size]
+            
+            images = []
+            angles = []
+            for batch_sample in batch_samples:
+                center_image = cv2.imread(sample[1])
+                center_angle = float(batch_sample[3])
+                images.append(center_image)
+                angles.append(center_angle)
+            
+            # trim image to only see section with road
+            X_train = np.array(images)
+            y_train = np.array(angles)
+            yield sklearn.utils.shuffle(X_train, y_train)
+
 
 # compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=256)
