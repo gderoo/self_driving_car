@@ -43,10 +43,10 @@ def random_brightness(image, angle, factor_min, factor_max):
 # Random shear, adapted from https://github.com/ksakmann/CarND-BehavioralCloning/blob/master/model.py
 def random_shear(image,angle,range):
     rows,cols,ch = image.shape
-    dx = range*np.random.randn() # Took normal sampling to limit oscillations
+    dx = range*np.random.randn() # Modifed for normal sampling to reduce oscillations
     p1 = np.float32([[0,rows],[cols,rows],[cols/2,rows/2]])
     p2 = np.float32([[0,rows],[cols,rows],[cols/2+dx,rows/2]])
-    M = cv2.getAffineTransform(p1,p2)
+    M = cv2.getAffineTransform(p1,p2) # Transforming middle point while maintaining bottom same
     image = cv2.warpAffine(image,M,(cols,rows),borderMode=1)
     dangle = dx/(rows/2) * 360/(2*np.pi*25.0) / 6.0
     angle += dangle
@@ -74,17 +74,16 @@ def random_modif(image, angle):
     return image, angle
 
 # Image generator
-def generator_new(samples, batch_size=32):
+def generator(samples, batch_size=32):
     
     while 1: # Loop forever so the generator never terminates
         samples = shuffle(samples)
-        i_batch, n_batch = 0, 0
+        n_batch = 0
         images, angles = [], []
 
         while n_batch < batch_size:
 
-            sample = samples[i_batch]
-            i_batch += 1
+            sample = samples[n_batch]
             
             # Random selection between left/center/right image
             n = np.random.choice([0,1,2])
@@ -103,8 +102,8 @@ def generator_new(samples, batch_size=32):
         yield shuffle(X_train, y_train)
 
 # Generator by sample
-train_generator = generator_new(train_samples, batch_size=256)
-validation_generator = generator_new(validation_samples, batch_size=256)
+train_generator = generator(train_samples, batch_size=256)
+validation_generator = generator(validation_samples, batch_size=256)
 
 # Building model
 model = Sequential()
