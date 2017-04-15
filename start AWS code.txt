@@ -1,0 +1,19 @@
+Normal instructions
+—————————————————————————
+git clone https://github.com/gderoo/self_driving_car
+cd "self_driving_car/Project 3 - Behavioral Cloning"
+wget https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip
+unzip -q data.zip
+source activate carnd-term1
+python train.py
+
+Fix1 -> not working, error during installation
+—————————————————————————
+sudo apt-get remove nvidia-*
+wget http://us.download.nvidia.com/XFree86/Linux-x86_64/367.57/NVIDIA-Linux-x86_64-367.57.run
+sudo bash ./NVIDIA-Linux-x86_64-367.57.run --dkms
+
+Fix2 (kill unattended upgrades process)
+—————————————————————————
+top
+sudo kill -9 <pid of update process>
