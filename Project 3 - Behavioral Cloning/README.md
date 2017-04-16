@@ -11,17 +11,6 @@ The goals / steps of this project are the following:
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
 
-
-[//]: # (Image References)
-
-[nvidia]: ./images/nvidia-architecture.png "NVIDIA architecture"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
-
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
@@ -107,34 +96,36 @@ The final model architecture (model.py lines 108-122) consisted of a convolution
 * Dense: "relu" activation # 10
 * Dense: # 1
 
-It looks similar to this:
+It looks similar to this original from NVIDIA:
 
 <img src="./images/nvidia-architecture.png" width="300">
 
 #### 3. Creation of the Training Set & Training Process
 
-After an attempt at creating additional datasets, without joystick, we noticed that the result was usually not better / jerky. In the end, we used the dataset provided [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip).
+After an attempt at creating additional datasets, without joystick, we noticed that the result was usually not better / jerky. In the end, we used the dataset provided [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip), which contained 8036 examples, and 3 times more images.
 
-![alt text][image2]
+We can notice however that even if use of the side cameras, and put an angle of +/-0.2. We are clearly oversampling for these angles
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+<img src="./images/histo_before.png">
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+To augment the data set, we did a series of operations:
+* random shuffle of the dataset
+* flipping the image horizontally in 50% of cases
+* random change the brightness by a factor of 0.5 to 1.2
+* random lateral shift by +/-50px, while correcting the angle
+* random shearing of the image to simulate a modification of the angle of the road. This transformation allows us to use even the images with an angle of 0 without overfitting for that angle. 
 
-Then I repeated this process on track two in order to get more data points.
+Below are random examples, starting from the original in top left corner:
+<img src="./images/augmentation.png">
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+The resulting distribution of angles is much smoother
+<img src="./images/histo_after.png">
 
-![alt text][image6]
-![alt text][image7]
+The ideal number of epochs was Z as evidenced by the fact that the training error was going below the validation error, while the latter was not decreasing as quickly.
 
-Etc ....
+#### 4. Next steps
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+Last, we notice for future improvements that the car mistakes shadows for road borders and tries to avoid them (only to steer back to the middle of the road when it arrives close to the edge). This could potentially overcome by casting random shadows during the data augmentation process.
 
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+Below an example in which the shadow steers the car to the right of the road:
+<img src="./images/shadow.png">
