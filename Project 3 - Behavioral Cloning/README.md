@@ -62,13 +62,10 @@ Before entering the core of the model, images are preprocessed through cropping 
 
 #### 2. Attempts to reduce overfitting in the model
 
-The NVIDIA model did not mention drop out, but we introduced one at the exit of the convolutional letters, with dropout probability 50% (model.py lines 118). 
-
-We also stopped after 7 epochs of 8,192 images.
-
-After an attempt at creating additional datasets, without joystick, we noticed that the result was usually not better. In the end, we used the dataset provided [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip).
-
-The main way to reduce overfitting was to use image augmentation described below.
+We reduced overfitting mainly through 3 main methods:
+- we introduced a dropout at the exit of the convolutional letters, with dropout probability 50% (model.py lines 118). 
+- we stopped after 7 epochs of 8,192 images when validation and training error were still in line
+- we used random data augmentation described below
 
 #### 3. Model parameter tuning
 
@@ -114,9 +111,11 @@ It looks similar to this:
 
 ![alt text][nvidia]
 
+![](./images/nvidia-architecture.png | height=10)
+
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+After an attempt at creating additional datasets, without joystick, we noticed that the result was usually not better / jerky. In the end, we used the dataset provided [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip).
 
 ![alt text][image2]
 
