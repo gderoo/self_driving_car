@@ -14,7 +14,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[nvidia]: ./images/nvidia-architecture.png = x100 "NVIDIA architecture"
+[nvidia]: ./images/nvidia-architecture.png "NVIDIA architecture"
 [image2]: ./examples/placeholder.png "Grayscaling"
 [image3]: ./examples/placeholder_small.png "Recovery Image"
 [image4]: ./examples/placeholder_small.png "Recovery Image"
@@ -102,8 +102,8 @@ The final model architecture (model.py lines 108-122) consisted of a convolution
 * Convolution: shape (5x5x24), stride of (2x2), "valid" padding, "relu" activation  # 24 x 33 x 158
 * Convolution: shape (5x5x36), stride of (2x2), "valid" padding, "relu" activation  # 36 x 15 x 77
 * Convolution: shape (5x5x48), stride of (2x2), "valid" padding, "relu" activation  # 48 x 6 x 37
-* Convolution: shape (5x5x64), stride of (1x1), "valid" padding, "relu" activation  # 64 x 4 x 35
-* Convolution: shape (5x5x64), stride of (1x1), "valid" padding, "relu" activation  # 64 x 2 x 33
+* Convolution: shape (3x3x64), stride of (1x1), "valid" padding, "relu" activation  # 64 x 4 x 35
+* Convolution: shape (3x3x64), stride of (1x1), "valid" padding, "relu" activation  # 64 x 2 x 33
 * Flatten and Dropout with 50% probability # 4,224
 * Dense: "relu" activation # 100
 * Dense: "relu" activation # 50
@@ -118,7 +118,7 @@ It looks similar to this:
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
+![alt text][image2 = x100]
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
 
