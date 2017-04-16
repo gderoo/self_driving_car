@@ -112,13 +112,13 @@ The final model architecture (model.py lines 108-122) consisted of a convolution
 
 It looks similar to this:
 
-![alt text][nvidia]
+![alt text][nvidia = 20]
 
 #### 3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2 = 20x20]
+![alt text][image2]
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
 
