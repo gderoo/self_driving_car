@@ -109,7 +109,7 @@ The final model architecture (model.py lines 108-122) consisted of a convolution
 
 It looks similar to this:
 
-<img src="./images/nvidia-architecture.png" width="100">
+<img src="./images/nvidia-architecture.png" width="300">
 
 #### 3. Creation of the Training Set & Training Process
 
