@@ -113,6 +113,7 @@ The final model architecture (model.py lines 108-122) consisted of a convolution
 It looks similar to this:
 
 ![alt text][nvidia = 20x]
+![](./images/nvidia-architecture.png = 20x)
 
 #### 3. Creation of the Training Set & Training Process
 
