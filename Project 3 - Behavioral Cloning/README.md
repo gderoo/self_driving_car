@@ -14,7 +14,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[nvidia]: ./images/nvidia-architecture.png "NVIDIA architecture"
+[nvidia]: ./images/nvidia-architecture.png = x100 "NVIDIA architecture"
 [image2]: ./examples/placeholder.png "Grayscaling"
 [image3]: ./examples/placeholder_small.png "Recovery Image"
 [image4]: ./examples/placeholder_small.png "Recovery Image"
