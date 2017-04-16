@@ -111,7 +111,7 @@ It looks similar to this:
 
 ![alt text][nvidia]
 
-![](./images/nvidia-architecture.png | height=10)
+<img src="./images/nvidia-architecture.png" width="10">
 
 #### 3. Creation of the Training Set & Training Process
 
