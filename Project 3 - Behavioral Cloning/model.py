@@ -107,13 +107,13 @@ validation_generator = generator(validation_samples, batch_size=256)
 
 # Building model
 model = Sequential()
-model.add(Cropping2D(cropping=((65,25),(0,0)),input_shape=(160, 320, 3))) # 3 x 68 x 320
+model.add(Cropping2D(cropping=((65,25),(0,0)),input_shape=(160, 320, 3))) # 3 x 70 x 320
 model.add(Lambda(lambda x: x/127.5 - 1.)) # Normalization
-model.add(Convolution2D(nb_filter = 24, nb_row = 5, nb_col = 5, subsample=(2, 2), border_mode = "valid", activation = "relu")) # 24 x 32 x 158
-model.add(Convolution2D(nb_filter = 36, nb_row = 5, nb_col = 5, subsample=(2, 2), border_mode = "valid", activation = "relu")) # 36 x 14 x 77
-model.add(Convolution2D(nb_filter = 48, nb_row = 5, nb_col = 5, subsample=(2, 2), border_mode = "valid", activation = "relu")) # 48 x 5 x 37
-model.add(Convolution2D(nb_filter = 64, nb_row = 3, nb_col = 3, subsample=(1, 1), border_mode = "valid", activation = "relu")) # 48 x 3 x 36
-model.add(Convolution2D(nb_filter = 64, nb_row = 3, nb_col = 3, subsample=(1, 1), border_mode = "valid", activation = "relu")) # 48 x 1 x 35
+model.add(Convolution2D(nb_filter = 24, nb_row = 5, nb_col = 5, subsample=(2, 2), border_mode = "valid", activation = "relu")) # 24 x 33 x 158
+model.add(Convolution2D(nb_filter = 36, nb_row = 5, nb_col = 5, subsample=(2, 2), border_mode = "valid", activation = "relu")) # 36 x 15 x 77
+model.add(Convolution2D(nb_filter = 48, nb_row = 5, nb_col = 5, subsample=(2, 2), border_mode = "valid", activation = "relu")) # 48 x 6 x 37
+model.add(Convolution2D(nb_filter = 64, nb_row = 3, nb_col = 3, subsample=(1, 1), border_mode = "valid", activation = "relu")) # 48 x 4 x 35
+model.add(Convolution2D(nb_filter = 64, nb_row = 3, nb_col = 3, subsample=(1, 1), border_mode = "valid", activation = "relu")) # 48 x 2 x 33
 model.add(Flatten())
 model.add(Dropout(0.5))
 model.add(Dense(100, activation = "relu"))
