@@ -116,9 +116,11 @@ To augment the data set, we did a series of operations:
 * random shearing of the image to simulate a modification of the angle of the road. This transformation allows us to use even the images with an angle of 0 without overfitting for that angle. 
 
 Below are random examples, starting from the original in top left corner:
+
 <img src="./images/augmentation.png">
 
 The resulting distribution of angles is much smoother
+
 <img src="./images/histo_after.png">
 
 The ideal number of epochs was Z as evidenced by the fact that the training error was going below the validation error, while the latter was not decreasing as quickly.
