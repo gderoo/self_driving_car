@@ -104,7 +104,7 @@ It looks similar to this original from NVIDIA:
 
 After an attempt at creating additional datasets, without joystick, we noticed that the result was usually not better / jerky. In the end, we used the dataset provided [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip), which contained 8036 examples, and 3 times more images.
 
-We can notice however that even if use of the side cameras, and put an angle of +/-0.2. We are clearly oversampling for these angles
+We can notice however that even if we use the side cameras, and put an angle of +/-0.2. We are clearly oversampling for these angles
 
 <img src="./images/histo_before.png">
 
