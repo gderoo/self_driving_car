@@ -123,7 +123,7 @@ The resulting distribution of angles is much smoother
 
 <img src="./images/histo_after.png">
 
-The ideal number of epochs was Z as evidenced by the fact that the training error was going below the validation error, while the latter was not decreasing as quickly.
+The ideal number of epochs was 7 as evidenced by the fact that the training error was going below the validation error, while the latter was not decreasing as quickly.
 
 #### 4. Next steps
 
