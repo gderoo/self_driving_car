@@ -16,6 +16,10 @@ The goals / steps of this project are the following:
 [undistort]: ./images/undistort.png
 [chessboard]: ./images/chessboard.png
 [binarythreshold]: ./images/binarythreshold.png
+[perspective]: ./images/perspective.png
+[windowsearch]: ./images/windowsearch.png
+[fullprocess]: ./images/fullprocess.png
+[curvature]: ./images/curvature.png
 [image2]: ./test_images/test1.jpg "Road Transformed"
 [image3]: ./examples/binary_combo_example.jpg "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
@@ -90,23 +94,37 @@ This resulted in the following source and destination points:
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+![alt text][perspective]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Then, to identify the points belonging to each line, we used a 2 pronged approach:
+* Initial lane points is found through the method of sliding windows
+* Further lane points are found looking at points in the neighborhood of the previous lane
 
-![alt text][image5]
+To summarize the initial lane point finding, shown [here](https://www.youtube.com/watch?v=siAMDK8C_x8)
+* the start of the lanes at the bottom of the image is found by looking at peaks in the distribution of non-zero points in the bottom half of the image along the x axis
+* then for as many times as we have vertical "windows", we look for points withing a window around the x-axis peaks, and update the value of those peaks using the average of the coordinates of the points found
+
+Once we have found points belonging to the lanes, through either method, we can fit a 2 degree polynomial separately for each line.
+
+The image below shows the impact on the 2 methods below: on the left the original lane initialization, then the search around the previously found lanes
+
+![alt text][windowsearch]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+The code for this step can be found in the "Curvature and position calculation" section, I used the formula shown below, using a scaling factor to transform the nb of pixel into meters.
+
+![alt text][curvature]
+
+In the processed image, we show the radius of the curvature (i.e. the inverse)
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+Finally, we drew the zone between the line in green and combined all the step in the "Build pipeline" section.  Here is an example of my result on an image extracted from the video:
 
-![alt text][image6]
+![alt text][fullprocess]
 
 ---
 
@@ -114,7 +132,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./project_video_processed.mp4)
 
 ---
 
@@ -122,4 +140,8 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+There are several potential shortcomings to the approach:
+* Lane inialization could be done with convolutions
+* Polynomial extrapolation could take further advantage of the parallelism of lanes. For example, we could constrain the polynomials to have closer coefficients (except the intercept). A rough attempt at this can be found in the `poly_fit()` function
+* More fail safe mechanisms could be build. Currently, there we have a search zone corresponding to an auto-regressive mean. Using a moving window could be more reactive. When averaging, we could weight based on a confidence index related to the number of lane points found 
+* Binary image should also be tested in more situations to make sure we have the most robust parameters (e.g. currently not using y gradient or magnitude)
