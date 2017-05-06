@@ -13,6 +13,7 @@ The goals / steps of this project are the following:
 [original]: ./images/original.png
 [car_features]: ./images/car_features.png
 [nocar_features]: ./images/nocar_features.png
+[prediction]: ./images/prediction.png
 [windows]: ./images/windows.png
 [heat1]: ./output_images/heatmap_test1.png
 [heat2]: ./output_images/heatmap_test2.png
@@ -20,15 +21,6 @@ The goals / steps of this project are the following:
 [heat4]: ./output_images/heatmap_test4.png
 [heat5]: ./output_images/heatmap_test5.png
 [heat6]: ./output_images/heatmap_test6.png
-[class_errors]: ./images/class_errors.png
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
