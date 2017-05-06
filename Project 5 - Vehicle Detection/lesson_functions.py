@@ -132,7 +132,7 @@ def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
         y_start_stop[1] = img.shape[0]
     # Add random integer
     add_x, add_y = random.randint(0, xy_rand[0]), random.randint(0, xy_rand[1])
-    x_start_stop[0] += add_x
+    x_start_stop[1] -= add_x
     y_start_stop[0] += add_y
     y_start_stop[1] += add_y
     # Compute the span of the region to be searched
@@ -155,8 +155,8 @@ def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
     for ys in range(ny_windows):
         for xs in range(nx_windows):
             # Calculate window position
-            startx = xs*nx_pix_per_step + x_start_stop[0]
-            endx = startx + xy_window[0]
+            endx = x_start_stop[1] - xs*nx_pix_per_step
+            startx = endx - xy_window[0]
             starty = ys*ny_pix_per_step + y_start_stop[0]
             endy = starty + xy_window[1]
             
