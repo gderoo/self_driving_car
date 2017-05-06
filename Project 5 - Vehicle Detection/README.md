@@ -1,8 +1,3 @@
-##Writeup Template
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Vehicle Detection Project**
 
 The goals / steps of this project are the following:
@@ -15,6 +10,9 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
+[original]: ./images/original.png
+[car_features]: ./images/car_features.png
+[nocar_features]: ./images/nocar_features.png
 [image1]: ./examples/car_not_car.png
 [image2]: ./examples/HOG_example.jpg
 [image3]: ./examples/sliding_windows.jpg
@@ -34,11 +32,13 @@ The goals / steps of this project are the following:
 
 You're reading it!
 
+Most of the code is in this [notebook](https://github.com/gderoo/self_driving_car/blob/master/Project%205%20-%20Vehicle%20Detection/notebook.ipynb), while the functions developped during the class are directly in this [python file](https://github.com/gderoo/self_driving_car/blob/master/Project%205%20-%20Vehicle%20Detection/lesson_functions.py)
+
 ###Histogram of Oriented Gradients (HOG)
 
 ####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in lines 7 through 24 of `lesson_functions.py`.  
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
@@ -49,7 +49,12 @@ I then explored different color spaces and different `skimage.hog()` parameters 
 Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
 
-![alt text][image2]
+![alt text][car_features]
+![alt text][nocar_features]
+
+Not that here, that above we did not represent the color_
+
+
 
 ####2. Explain how you settled on your final choice of HOG parameters.
 
@@ -104,5 +109,8 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.
+
+* Add random noise in the window positions in order to have a smoother evolution of the boxes
+* Implement a faster HOG calculation strategy in which the HOG is calculated once, and not for each window separately
 
