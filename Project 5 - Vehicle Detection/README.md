@@ -1,4 +1,4 @@
-**Vehicle Detection Project**
+# **Vehicle Detection Project**
 
 The goals / steps of this project are the following:
 
@@ -14,6 +14,13 @@ The goals / steps of this project are the following:
 [car_features]: ./images/car_features.png
 [nocar_features]: ./images/nocar_features.png
 [windows]: ./images/windows.png
+[heat1]: ./output_images/heatmap_test1.png
+[heat2]: ./output_images/heatmap_test2.png
+[heat3]: ./output_images/heatmap_test3.png
+[heat4]: ./output_images/heatmap_test4.png
+[heat5]: ./output_images/heatmap_test5.png
+[heat6]: ./output_images/heatmap_test6.png
+[class_errors]: ./images/class_errors.png
 [image1]: ./examples/car_not_car.png
 [image2]: ./examples/HOG_example.jpg
 [image3]: ./examples/sliding_windows.jpg
@@ -39,45 +46,45 @@ Most of the code is in this [notebook](https://github.com/gderoo/self_driving_ca
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-Labeled images were taken from the GTI vehicle image database GTI, the KITTI vision benchmark suite, and examples extracted from the project video itself. All images are 64x64 pixels. A third data set released by Udacity was not used here. In total there are 8792 images of vehicles and 9666 images of non vehicles.
+Labeled images were taken from the GTI vehicle image database GTI and the KITTI vision benchmark suite. All images are 64x64 pixels. A third data set released by Udacity was not used here. In total there are 8792 images of vehicles and 8968 images of non vehicles.
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
 ![alt text][original]
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
+I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I applied the HOG  algorithm to the different channels of random images to see the result.
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
-
+Here is an example using the `HLS` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
 ![alt text][car_features]
 ![alt text][nocar_features]
 
-Not that here, that above we did not represent the color_
-
-
-
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+I tried various combinations of parameters and settled on the ones showed above because:
+
+* HLS color space seemed to have the best results with the L-channel appears to be most important, followed by the S channel. I discarded RGB color space under changing light conditions. YCrCb also provided good results
+* Increasing the orientation would have increased the numer of parameters but did not seem to have an impact on the SVM 
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-As suggested, I trained a linear SVM. For that I used a gridsearch on the C parameter, with an locally optimal value found for 0.01 (optimal value could be lower, but we were afraid to overfit)
+As suggested, I trained a linear SVM using the spatial bin, the color histogram and the HOG features. The result was a SVM with 99% accuracy on the test set which seemed good enough.
 
 ### Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to choose a series of windows that seem to follow some perspective effect
+I decided to choose a series of windows that would follow a perspective effect because smaller cars should only be further on the horizon. In addition to this, I decided to put some randomness in the x and y origins in order to help smooth the behaviors of the detector. The main function `slide_window()` was modified from the lesson functions and can be found line 122-166 of `lesson_functions.py`
 
 ![alt text][windows]
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+I used the features described above. To further optimize the performance, the SVM was used on features which were scaled across training images. I also used a GridSearch on the C parameter, with an locally optimal value found for 0.01 (optimal value could be lower, but we were afraid to overfit).
 
-![alt text][image4]
+Here are some example of false positives:
+
+![alt text][class_errors]
 ---
 
 ### Video Implementation
@@ -92,17 +99,15 @@ I recorded the positions of positive detections in each frame of the video.  Fro
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
-### Here are six frames and their corresponding heatmaps:
+### Here are six frames and their corresponding heatmaps, togther with the resulting bounding boxes:
+![alt text][heat1]
+![alt text][heat2]
+![alt text][heat3]
+![alt text][heat4]
+![alt text][heat5]
+![alt text][heat6]
 
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
-
-
+We can notice that the 3rd seems to fail to identify, but during the video this does not manifest, because the randomization of window start combined with the averaging over the past 5 images corrects for that mistake.
 
 ---
 
@@ -110,9 +115,13 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.
+There are a couple of issues we can anticipated:
 
-* Add random noise in the window positions in order to have a smoother evolution of the boxes
+* Risk associated to generalization of different luminosity context, etc
+* We can also notice that the car is not very precisely boxed, with the box sometimes covering only part (despite the smoothing and randomization techniques employed)
+* Last, we used a lot of features, so the biggest concern at this stage is the computing speed:
+
+Potential improvements for the computing spee could be:
+
+* Drop the features with least impact to help increase computing speed too
 * Implement a faster HOG calculation strategy in which the HOG is calculated once, and not for each window separately
-* Use a different classifier
-
