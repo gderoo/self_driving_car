@@ -31,7 +31,7 @@ The goals / steps of this project are the following:
 [video1]: ./project_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
+### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
 ### Writeup / README
@@ -52,9 +52,9 @@ I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an 
 
 ![alt text][original]
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I applied the HOG  algorithm to the different channels of random images to see the result.
+I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I applied the HOG  algorithm to the different channels to see the result.
 
-Here is an example using the `HLS` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
+Here is an example using the `HLS` color space and the following HOG parameters: `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`.
 
 ![alt text][car_features]
 ![alt text][nocar_features]
@@ -68,7 +68,9 @@ I tried various combinations of parameters and settled on the ones showed above 
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-As suggested, I trained a linear SVM using the spatial bin, the color histogram and the HOG features. The result was a SVM with 99% accuracy on the test set which seemed good enough.
+On top of the HOG parameters, we also use the spatial bin and the color histogram (the main feature extraction function is `extract_features()` which can be seen in line 97-116 of the python file, and is called in the "Feature extraction" section of the notebook)
+
+As suggested, I trained a linear SVM (which can be seen in the "Classifier fitting" section of the notebook). The result was a SVM with 99% accuracy on the test set which seemed good enough.
 
 ### Sliding Window Search
 
@@ -80,7 +82,10 @@ I decided to choose a series of windows that would follow a perspective effect b
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-I used the features described above. To further optimize the performance, the SVM was used on features which were scaled across training images. I also used a GridSearch on the C parameter, with an locally optimal value found for 0.01 (optimal value could be lower, but we were afraid to overfit).
+I used the features described above. To further optimize the performance,
+
+* the SVM was trained on features which were scaled across training images
+* I also used a GridSearch on the C parameter, with an locally optimal value found for 0.01 (optimal value could be lower, but we were afraid to overfit)
 
 Here are some example of false positives:
 
