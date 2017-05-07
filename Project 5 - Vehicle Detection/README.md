@@ -79,9 +79,9 @@ I used the features described above. To further optimize the performance,
 * the SVM was trained on features which were scaled across training images
 * I also used a GridSearch on the C parameter, with an locally optimal value found for 0.01 (optimal value could be lower, but we were afraid to overfit)
 
-Here are some example of false positives:
+Here are some example of predictions:
 
-![alt text][class_errors]
+![alt text][prediction]
 ---
 
 ### Video Implementation
